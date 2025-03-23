@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
+{% endblock %}
+{% block content %}
+<!-- Header Section -->
+<div class="header d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center">
+    <h1 class="ms-3">Demo Institute of Technology, Madras</h1>
+  </div>
+  <div class="d-flex align-items-center">
+    <span>Ministry of Demo | Government of Demo</span>
+    <div class="ms-3">
+      <a href="/login" class="btn btn-success btn-sm">Login / Register</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Section -->
+<div class="main-container">
+  <h1>Practice the Previous Quiz Question Papers</h1>
+
+  <h2 class="mt-4">Available Courses</h2>
+  <div class="course-container">
+    <div class="course-card">BS in Data Science and Applications</div>
+  </div>
+
+  <h2 class="mt-4">Key Features</h2>
+  <div class="feature-container">
+    <div class="feature-card">
+      <h5>160+ Question Papers</h5>
+      <p>Practice with a wide range of question papers to prepare for your exams.</p>
+    </div>
+    <div class="feature-card">
+      <h5>50K+ Questions</h5>
+      <p>Access a vast library of questions to enhance your learning experience.</p>
+    </div>
+    <div class="feature-card">
+      <h5>AI Powered Answers</h5>
+      <p>Get solutions of the questions which is solved by AI or fellow students.</p>
+    </div>
+    <div class="feature-card">
+      <h5>Exam-like Environment</h5>
+      <p>Helps students practice in a way that closely resembles real exams.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; All Rights Reserved - IIT Madras</p>
+</footer>
+
+{% endblock %}

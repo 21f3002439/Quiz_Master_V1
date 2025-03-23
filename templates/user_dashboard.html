@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='exam.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Header Section -->
+<div class="header d-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center">
+    <h1 class="ms-3">Demo Institute of Technology, Madras</h1>
+  </div>
+  <div class="d-flex align-items-center">
+    <span>Ministry of Demo | Government of Demo</span>
+    <div class="ms-3"><a href="{{ url_for('user_summary') }}" class="btn btn-primary btn-sm">Summary</a></div>
+    <div><a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Logout</a></div>
+  </div>
+</div>
+
+<!-- Main Content Section -->
+<div class="main-content">
+  <!-- Video Section -->
+  <div class="video-section">
+    <h2>Calm Your Mind Before Exam</h2>
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/qQzf-xzZO7M" title="Focus & Relaxing"
+      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-section text-center">
+    <h3>Select Subject, Chapter, and Quiz</h3>
+    <form method="POST" action="{{ url_for('start_exam') }}">
+      <!-- Subject Dropdown -->
+      <select class="form-select dropdown" name="subject" id="subjectSelect" required>
+        <option selected disabled>--Select Subject--</option>
+        {% for subject in subjects %}
+        <option value="{{ subject.id }}">{{ subject.sub_name }}</option>
+        {% endfor %}
+      </select>
+
+      <!-- Chapter Dropdown -->
+      <select class="form-select dropdown" name="chapter" id="chapterSelect" required>
+        <option selected disabled>--Select Chapter--</option>
+      </select>
+
+      <!-- Quiz Dropdown -->
+      <select class="form-select dropdown" name="quiz" id="quizSelect" required>
+        <option selected disabled>--Select Quiz--</option>
+      </select>
+
+      <button class="btn btn-primary start-btn mt-3" type="submit" id="startExamBtn" disabled>Start Exam</button>
+    </form>
+    <p class="mt-2">
+      For Practice Tests of December 2020 onwards, please <a href="#" style="color: #ffcc00;">click here</a>.
+    </p>
+  </div>
+</div>
+
+<!-- Footer Section -->
+<footer>
+  <p>&copy; All Rights Reserved - IIT Madras</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const subjectSelect = document.getElementById('subjectSelect');
+    const chapterSelect = document.getElementById('chapterSelect');
+    const quizSelect = document.getElementById('quizSelect');
+    const startExamBtn = document.getElementById('startExamBtn');
+
+    // Disable Start Exam button initially
+    startExamBtn.disabled = true;
+
+    subjectSelect.addEventListener('change', function () {
+      const subjectId = this.value;
+      chapterSelect.innerHTML = '<option selected disabled>--Select Chapter--</option>';
+      quizSelect.innerHTML = '<option selected disabled>--Select Quiz--</option>';
+      startExamBtn.disabled = true;
+
+      fetch(`/get_chapters/${subjectId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.chapters && data.chapters.length > 0) {
+            data.chapters.forEach(chapter => {
+              const option = document.createElement('option');
+              option.value = chapter.id;
+              option.textContent = chapter.chap_name;
+              chapterSelect.appendChild(option);
+            });
+
+            chapterSelect.disabled = false;
+          } else {
+            const option = document.createElement('option');
+            option.textContent = "No chapters available";
+            chapterSelect.appendChild(option);
+            chapterSelect.disabled = true;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching chapters:', error);
+          chapterSelect.innerHTML = '<option selected disabled>Error fetching chapters</option>';
+        });
+    });
+
+    chapterSelect.addEventListener('change', function () {
+      const chapterId = this.value;
+      quizSelect.innerHTML = '<option selected disabled>--Select Quiz--</option>';
+      startExamBtn.disabled = true;
+
+      fetch(`/get_quizzes/${chapterId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.quizzes && data.quizzes.length > 0) {
+            data.quizzes.forEach(quiz => {
+              const option = document.createElement('option');
+              option.value = quiz.id;
+              option.textContent = quiz.quiz_name;
+              quizSelect.appendChild(option);
+            });
+
+            quizSelect.disabled = false;
+          } else {
+            const option = document.createElement('option');
+            option.textContent = "No quizzes available";
+            quizSelect.appendChild(option);
+            quizSelect.disabled = true;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching quizzes:', error);
+          quizSelect.innerHTML = '<option selected disabled>Error fetching quizzes</option>';
+        });
+    });
+
+    quizSelect.addEventListener('change', function () {
+      startExamBtn.disabled = !this.value;
+    });
+  });
+</script>
+
+{% endblock %}

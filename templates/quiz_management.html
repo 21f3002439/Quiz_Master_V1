@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Quiz Management</h2>
+    <p class="text-center">Manage all quizzes here.</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Chapter</th>
+                <th>Scheduled Date</th>
+                <th>Duration (min)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizzes %}
+            <tr>
+                <td>{{ quiz.title }}</td>
+                <td>{{ quiz.chapter.name }}</td>
+                <td>{{ quiz.scheduled_date }}</td>
+                <td>{{ quiz.duration_minutes }}</td>
+                <td>
+                    <a href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('add_quiz') }}" class="btn btn-success">+ Add Quiz</a>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">{{ user.username }}'s Details</h2>
+
+    <!-- Reject Button -->
+    <form method="POST" action="{{ url_for('reject_user', user_id=user.id) }}">
+        <button type="submit" class="btn btn-danger mb-3">Reject User</button>
+    </form>
+
+    <h3>Quiz Attempts</h3>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Quiz</th>
+                <th>Attempt #</th>
+                <th>Marks Obtained</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, stats in quiz_statistics.items() %}
+            <tr>
+                <td>{{ stats.subject_name }}</td>
+                <td>{{ stats.chapter_name }}</td>
+                <td>{{ stats.quiz_name }}</td>
+                <td>{{ stats.attempt }}</td>
+                <td>{{ stats.marks }}</td>
+                <td>{{ stats.total_marks }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="{{ url_for('approved_users') }}" class="btn btn-secondary">Back to Users</a>
+    </div>
+</div>
+{% endblock %}

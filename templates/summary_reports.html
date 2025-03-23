@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Summary Reports</h2>
+    <p class="text-center">View quiz performance and statistics.</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Quiz Title</th>
+                <th>Scores</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz_title, scores in summary_data.items() %}
+            <tr>
+                <td>{{ quiz_title }}</td>
+                <td>{{ scores | join(', ') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

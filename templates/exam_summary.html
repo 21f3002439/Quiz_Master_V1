@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Exam Summary</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card bg-primary text-white text-center">
+                <div class="card-body">
+                    <h4>Total Users Registered</h4>
+                    <h2>{{ total_users }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-info text-white text-center">
+                <div class="card-body">
+                    <h4>Click on View Approved Users to know more</h4>
+                    <p>Learn more about the approved users by clicking the button below.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button to view approved users -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('approved_users') }}" class="btn btn-primary btn-lg">View Approved Users</a>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>New Users for Approval</h4>
+                    {% for user in new_users %}
+                    <p>{{ user.username }} - {{ user.email }}</p>
+                    <form action="{{ url_for('approve_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                    </form>
+                    <form action="{{ url_for('reject_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary btn-lg">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

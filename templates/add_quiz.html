@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Add a New Quiz</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" name="title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="scheduled_date" class="form-label">Scheduled Date</label>
+            <input type="date" class="form-control" name="scheduled_date" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration (HH:MM)</label>
+            <!-- Input type="text" allows the user to input in HH:MM format -->
+            <input type="text" class="form-control" name="duration" placeholder="Enter Duration (HH:MM)" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create Quiz</button>
+        <a href="{{ url_for('add_chapter', subject_id=chapter.sub_id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    <h2 class="mt-4">Previous Quizzes</h2>
+    <ul class="list-group">
+        {% for quiz in previous_quizzes %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ url_for('add_question', quiz_id=quiz.id) }}">{{ quiz.quiz_name }}</a>
+            <span class="badge bg-primary">{{ quiz.chapter.chap_name }}</span>
+            
+            <!-- Edit button to trigger modal -->
+            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editQuizModal{{ quiz.id }}">
+                Edit
+            </button>
+
+            <!-- Form to delete the quiz -->
+            <form method="POST" action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+
+            <!-- Modal for editing quiz name -->
+            <div class="modal fade" id="editQuizModal{{ quiz.id }}" tabindex="-1" aria-labelledby="editQuizModalLabel{{ quiz.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editQuizModalLabel{{ quiz.id }}">Edit Quiz Name</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{{ url_for('edit_quiz', quiz_id=quiz.id) }}">
+                                <div class="mb-3">
+                                    <label for="quiz_name" class="form-label">Quiz Title</label>
+                                    <input type="text" class="form-control" name="quiz_name" value="{{ quiz.quiz_name }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

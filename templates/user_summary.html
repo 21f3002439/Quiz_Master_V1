@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Your Test Summary</h2>
+
+    <div class="row">
+        <!-- Total Attempts -->
+        <div class="col-md-6">
+            <div class="card bg-primary text-white text-center p-4">
+                <div class="card-body">
+                    <h4>Total Attempts</h4>
+                    <h2>{{ total_attempts }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Marks Obtained -->
+        <div class="col-md-6">
+            <div class="card bg-success text-white text-center p-4">
+                <div class="card-body">
+                    <h4>Total Marks Obtained</h4>
+                    <h2>{{ total_marks_obtained }} / {{ total_max_marks }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-5">Quiz Attempts</h3>
+    <table class="table table-bordered mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th>Subject Name</th>
+                <th>Chapter Name</th>
+                <th>Quiz Name</th>
+                <th>Marks Obtained</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz_id, stats in quiz_statistics.items() %}
+            <tr>
+                <td>{{ stats.subject_name }}</td>
+                <td>{{ stats.chapter_name }}</td>
+                <td>{{ stats.quiz_name }}</td>
+                <td>{{ stats.marks }}</td>
+                <td>{{ stats.total_marks }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
